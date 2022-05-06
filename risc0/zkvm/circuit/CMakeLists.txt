@@ -1,4 +1,4 @@
-add_library(circuit
+add_library(zkvm-circuit
 	accum_regs.cpp     
 	context.cpp        
 	decode_cycle.cpp   
