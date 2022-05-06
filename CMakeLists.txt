@@ -14,5 +14,5 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 
 
 
-include_directories(${risc0_SOURCE_DIR})
+include_directories(${risc0_SOURCE_DIR} ${CMAKE_BINARY_DIR})
 add_subdirectory(risc0)
