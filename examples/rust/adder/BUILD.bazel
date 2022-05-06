@@ -1,0 +1,43 @@
+load("@rules_rust//rust:defs.bzl", "rust_binary", "rust_library", "rust_test")
+
+rust_binary(
+    name = "adder",
+    srcs = ["src/add.rs"],
+    data = [
+        "//examples/rust/adder/core:add",
+        "//examples/rust/adder/core:add.id",
+    ],
+    rustc_flags = ["-Coverflow-checks=on"],
+    deps = [
+        ":lib",
+        "@crates_host//:clap",
+        "@crates_host//:env_logger",
+        "@crates_host//:log",
+    ],
+)
+
+rust_library(
+    name = "lib",
+    srcs = ["src/lib.rs"],
+    proc_macro_deps = ["@crates_host//:ctor"],
+    rustc_flags = ["-Coverflow-checks=on"],
+    deps = [
+        "//examples/rust/adder/core:core_host",
+        "//risc0/zkvm/sdk/rust/core:core_host",
+        "//risc0/zkvm/sdk/rust/host",
+        "//risc0/zkvm/sdk/rust/serde:serde_host",
+        "@crates_host//:env_logger",
+        "@crates_host//:log",
+        "@crates_host//:sha2",
+    ],
+)
+
+rust_test(
+    name = "test",
+    crate = ":lib",
+    data = [
+        "//examples/rust/adder/core:add",
+        "//examples/rust/adder/core:add.id",
+    ],
+    rustc_flags = ["-Coverflow-checks=on"],
+)

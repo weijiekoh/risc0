@@ -1,0 +1,28 @@
+load("//bazel/rules/risc0:defs.bzl", "risc0_rust_library_pair", "risc0_rust_method")
+
+risc0_rust_method(
+    name = "add",
+    srcs = ["src/bin/add.rs"],
+    rustc_flags = ["-Coverflow-checks=on"],
+    visibility = ["//visibility:public"],
+    deps = [
+        ":core_guest",
+        "//risc0/zkvm/sdk/rust/guest",
+    ],
+)
+
+risc0_rust_library_pair(
+    name = "core",
+    srcs = ["src/lib.rs"],
+    crate_name = "adder_core",
+    guest_deps = [
+        "//risc0/zkvm/sdk/rust/core:core_guest",
+        "@crates_guest//:serde",
+    ],
+    host_deps = [
+        "//risc0/zkvm/sdk/rust/core:core_host",
+        "@crates_host//:serde",
+    ],
+    rustc_flags = ["-Coverflow-checks=on"],
+    visibility = ["//visibility:public"],
+)
