@@ -23,10 +23,13 @@ risc0_zkvm_guest::entry!(main);
 
 pub fn main() {
     let request: AddRequest = env::read();
+    let c: u32 = request.a + request.b;
 
-    // Does _c get computed in the VM even though it is not used anywhere
-    // else, like as an output?
-    let _c: u32 = request.a + request.b;
+    // The compiler will remove unused computations so `c` must be written to
+    // the host. env::write writes to the private output, while env::commit
+    // writes to the public output (aka the journal). Since we want to keep `c`
+    // secret, we use env::write.
+    env::write(&c);
 
     env::commit(&AdditionResultCommit {});
 }
